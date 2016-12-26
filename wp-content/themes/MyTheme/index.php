@@ -1,35 +1,48 @@
 <?php get_header(); ?>
 <section id="about" class="s_about bg_light">
 	<div class="section_header">
-		<h2>Обо мне</h2>
+		<h2><?php echo get_cat_name(5)?></h2>
 		<div class="s_descr_wrap">
-			<div class="s_descr">Познакомимся ближе</div>
+			<div class="s_descr"><?php echo category_description(5)?></div>
 		</div>
 	</div>
 	<div class="section_content">
 		<div class="container">
 			<div class="row">
+				<?php if (have_posts()) : query_posts('p=10')?>
 				<div class="col-md-4 col-md-push-4 animation_1">
-					<h3>Фото</h3>
+					<?php while (have_posts()) : the_post();?>
+					<h3><?php the_title()?></h3>
 					<div class="person">
-						<a href="img/photo.jpg" class="popup"><img src="img/photo.jpg" alt="Alt" /></a>
+						<a href="<?php echo get_the_post_thumbnail_url($post->ID);?>" class="popup"><img src="<?php echo get_the_post_thumbnail_url($post->ID);?>" alt="Alt" /></a>
 					</div>
+					<?php endwhile; ?>
 				</div>
+				<?php endif; wp_reset_query();?>
+
+				<?php if (have_posts()) : query_posts('p=8')?>
 				<div class="col-md-4 col-md-pull-4 animation_2">
-					<h3>Немного о себе</h3>
-					<p>Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века.</p>
-					<p>Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов.</p>
+					<?php while (have_posts()) : the_post();?>
+					<h3><?php the_title();?></h3>
+					<?php the_content();?>
+					<?php endwhile; ?>
 				</div>
+				<?php endif; wp_reset_query();?>
+
+				<?php if (have_posts()) : query_posts('p=13')?>
 				<div class="col-md-4 animation_3 personal_last_block">
-					<h3>Персональная информация</h3>
-					<h2 class="personal_header">Мирончиков Илья</h2>
+					<?php while (have_posts()) : the_post();?>
+					<h3><?php the_title();?></h3>
+						<?php the_content();?>
+					<!--<h2 class="personal_header">Мирончиков Илья</h2>
 					<ul>
 						<li>Профессиональное создание сайтов: HTML верстка, посадка на CMS WordPress, Laravel</li>
 						<li>День рождения: 2 мая 1991 года</li>
 						<li>Номер телефона: +7 999 999 99 99</li>
 						<li>E-mail: <a href="mailto:youmail@mail.ru">youmail@mail.ru</a></li>
 						<li>Веб-сайт: <a href="//webdesign-master.ru" target="_blank">webdesign-master.ru</a></li>
-					</ul>
+					</ul>-->
+					<?php endwhile; ?>
 					<div class="social_wrap">
 						<ul>
 							<li><a href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
@@ -39,6 +52,9 @@
 						</ul>
 					</div>
 				</div>
+				<?php endif; wp_reset_query();?>
+
+
 			</div>
 		</div>
 	</div>
