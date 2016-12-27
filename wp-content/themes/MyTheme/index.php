@@ -98,22 +98,26 @@
 	<div class="section_content">
 		<div class="container">
 			<div class="row">
-				<?php $categories = get_categories(['child_of' => 9, 'order' => 'DESC']);?>
-				<?php if( $categories ) :?>
 					<div class="filter_div controls">
 						<ul>
 							<li class="filter active" data-filter="all">Все работы</li>
-							<?php foreach( $categories as $cat ):?>
-							<li class="filter" data-filter=".category-<?php echo $cat->cat_ID?>"><?php echo $cat->name?></li>
-							<?php endforeach;?>
+							<li class="filter" data-filter=".sites">Сайты</li>
+							<li class="filter" data-filter=".identity">Айдентика</li>
+							<li class="filter" data-filter=".logos">Логотипы</li>
 						</ul>
 					</div>
-				<?php endif;?>
 				<?php if (have_posts()) : query_posts('cat=9')?>
 				<div id="portfolio_grid">
 					<?php while (have_posts()) : the_post();?>
-						<?php $category = get_the_category();?>
-					<div class="mix col-md-3 col-sm-6 col-xs-12 portfolio_item category-<?php echo $category[0]->cat_ID?>">
+						<?php $tags = wp_get_post_tags($post->ID);
+						?>
+					<div class="mix col-md-3 col-sm-6 col-xs-12 portfolio_item <?php
+					if($tags){
+						foreach ($tags as $tag) {
+							echo ' ' . $tag->name;
+						}
+					}
+					?>">
 						<img src="<?php echo get_the_post_thumbnail_url($post->ID);?>" alt="<?php echo get_the_post_thumbnail_caption($post->ID);?>" />
 						<div class="port_item_cont">
 							<h3><?php the_title();?></h3>
@@ -141,31 +145,25 @@
 
 <section id="contacts" class="s_contacts bg_light">
 	<div class="section_header">
-		<h2>Контакты</h2>
+		<h2><?php echo get_cat_name(13)?></h2>
 		<div class="s_descr_wrap">
-			<div class="s_descr">Оставьте ваше сообщение</div>
+			<div class="s_descr"><?php echo category_description(9)?></div>
 		</div>
 	</div>
 	<div class="section_content">
 		<div class="container">
 			<div class="row">
+			<?php if (have_posts()) : query_posts('cat=13')?>
 				<div class="col-md-6 col-sm-6">
+				<?php while (have_posts()) : the_post();?>
 					<div class="contact_box">
-						<div class="contacts_icon icon-basic-geolocalize-05"></div>
-						<h3>Адрес:</h3>
-						<p>Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне.</p>
+						<div class="contacts_icon icon-basic-<?php echo get_post_meta($post->ID, 'icon_contacts', true)?>"></div>
+						<h3><?php the_title();?></h3>
+						<?php the_content();?>
 					</div>
-					<div class="contact_box">
-						<div class="contacts_icon icon-basic-smartphone"></div>
-						<h3>Телефон:</h3>
-						<p>+7 999 999 99 99</p>
-					</div>
-					<div class="contact_box">
-						<div class="contacts_icon icon-basic-webpage-img-txt"></div>
-						<h3>Веб-сайт:</h3>
-						<p><a href="//webdesign-master.ru" target="_blank">webdesign-master.ru</a></p>
-					</div>
+				<?php endwhile; ?>
 				</div>
+				<?php endif; wp_reset_query();?>
 				<div class="col-md-6 col-sm-6">
 					<form action="http://formspree.io/agragregra@ya.ru" class="main_form" novalidate target="_blank" method="post">
 						<label class="form-group">
