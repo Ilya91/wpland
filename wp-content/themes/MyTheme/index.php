@@ -44,6 +44,8 @@
 
 </section>
 
+
+
 <section id="resume" class="s_resume">
 	<div class="section_header">
 		<h2><?php echo get_cat_name(6)?></h2>
@@ -87,12 +89,17 @@
 		</div>
 	</div>
 </section>
-
+<?php
+$obj = get_post_type_object( 'portfolio' );
+$params = get_params_for_wp_query();
+$categories = get_categories_for_data_filter();
+$portfolio = custom_wp_query($params);
+?>
 <section id="portfolio" class="s_portfolio bg_dark">
 	<div class="section_header">
-		<h2><?php echo get_cat_name(9)?></h2>
+		<h2><?php echo $obj->label?></h2>
 		<div class="s_descr_wrap">
-			<div class="s_descr"><?php echo category_description(9)?></div>
+			<div class="s_descr"><p><?php echo $obj->description?></p></div>
 		</div>
 	</div>
 	<div class="section_content">
@@ -101,14 +108,16 @@
 					<div class="filter_div controls">
 						<ul>
 							<li class="filter active" data-filter="all">Все работы</li>
-							<li class="filter" data-filter=".sites">Сайты</li>
-							<li class="filter" data-filter=".identity">Айдентика</li>
-							<li class="filter" data-filter=".logos">Логотипы</li>
+							<?php foreach ($categories as $slug => $name) :?>
+							<li class="filter" data-filter=".<?php echo $slug?>"><?php echo $name?></li>
+							<?php endforeach;?>
 						</ul>
 					</div>
-				<?php if (have_posts()) : query_posts('cat=9')?>
+
+
+				<?php if ($portfolio->have_posts()) :?>
 				<div id="portfolio_grid">
-					<?php while (have_posts()) : the_post();?>
+					<?php while ($portfolio->have_posts()) : $portfolio->the_post();?>
 						<?php $tags = wp_get_post_tags($post->ID);
 						?>
 					<div class="mix col-md-3 col-sm-6 col-xs-12 portfolio_item <?php
@@ -142,7 +151,6 @@
 		</div>
 	</div>
 </section>
-
 <section id="contacts" class="s_contacts bg_light">
 	<div class="section_header">
 		<h2><?php echo get_cat_name(13)?></h2>
@@ -164,6 +172,11 @@
 				<?php endwhile; ?>
 				</div>
 				<?php endif; wp_reset_query();?>
+<!--                --><?php /*$options = get_option('sample_theme_options');
+                        echo $options['phonetext'];
+                        echo $options['sitetext'];
+                        echo $options['addresstext'];
+                */?>
 				<div class="col-md-6 col-sm-6">
 					<form action="http://formspree.io/agragregra@ya.ru" class="main_form" novalidate target="_blank" method="post">
 						<label class="form-group">
